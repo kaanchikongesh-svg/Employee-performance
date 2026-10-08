@@ -257,7 +257,7 @@ with st.sidebar:
     st.info(f"**Loaded Records:** {len(st.session_state['current_dataset']):,} employees")
     
     # Reset to default button
-    if st.button("🔄 Reset to Synthetic Dataset", use_container_width=True):
+    if st.button("🔄 Reset to Synthetic Dataset", key="btn_reset_dataset_sidebar", use_container_width=True):
         st.session_state["current_dataset"] = load_default_data()
         st.session_state["model_package"] = get_or_initialize_model()
         st.success("Reset successfully!")
@@ -372,35 +372,35 @@ with tab_single:
 
     with col_a:
         st.markdown("##### 🏢 Organizational Profile")
-        emp_id = st.text_input("Employee ID", value="EMP-2045")
-        dept = st.selectbox("Department", options=DEPARTMENT_OPTIONS, index=0)
+        emp_id = st.text_input("Employee ID", value="EMP-2045", key="pred_emp_id")
+        dept = st.selectbox("Department", options=DEPARTMENT_OPTIONS, index=0, key="pred_dept_select")
         role_options = JOB_ROLE_OPTIONS.get(dept, ALL_JOB_ROLES)
-        job_role = st.selectbox("Job Role", options=role_options, index=0)
-        job_level = st.selectbox("Job Level", options=[1, 2, 3, 4, 5], index=2)
-        monthly_income = st.number_input("Monthly Income ($)", min_value=1000.0, max_value=35000.0, value=7500.0, step=250.0)
-        team_size = st.number_input("Team Size", min_value=1, max_value=50, value=8, step=1)
+        job_role = st.selectbox("Job Role", options=role_options, index=0, key="pred_job_role_select")
+        job_level = st.selectbox("Job Level", options=[1, 2, 3, 4, 5], index=2, key="pred_job_level_select")
+        monthly_income = st.number_input("Monthly Income ($)", min_value=1000.0, max_value=35000.0, value=7500.0, step=250.0, key="pred_income_input")
+        team_size = st.number_input("Team Size", min_value=1, max_value=50, value=8, step=1, key="pred_team_size_input")
 
     with col_b:
         st.markdown("##### 👤 Demographics & Experience")
-        age = st.number_input("Age", min_value=18, max_value=65, value=33, step=1)
-        gender = st.selectbox("Gender", options=GENDER_OPTIONS, index=0)
-        experience = st.number_input("Years of Experience", min_value=0.0, max_value=40.0, value=7.0, step=0.5)
-        promotion_history = st.selectbox("Promoted in Company?", options=PROMOTION_OPTIONS, index=1)
-        years_since_promo = st.number_input("Years Since Last Promotion", min_value=0.0, max_value=20.0, value=1.5, step=0.5)
-        work_life_balance = st.slider("Work-Life Balance Rating", min_value=1, max_value=5, value=4)
+        age = st.number_input("Age", min_value=18, max_value=65, value=33, step=1, key="pred_age_input")
+        gender = st.selectbox("Gender", options=GENDER_OPTIONS, index=0, key="pred_gender_select")
+        experience = st.number_input("Years of Experience", min_value=0.0, max_value=40.0, value=7.0, step=0.5, key="pred_exp_input")
+        promotion_history = st.selectbox("Promoted in Company?", options=PROMOTION_OPTIONS, index=1, key="pred_promo_select")
+        years_since_promo = st.number_input("Years Since Last Promotion", min_value=0.0, max_value=20.0, value=1.5, step=0.5, key="pred_years_promo_input")
+        work_life_balance = st.slider("Work-Life Balance Rating", min_value=1, max_value=5, value=4, key="pred_wlb_slider")
 
     with col_c:
         st.markdown("##### ⚡ Productivity & Engagement")
-        prev_perf = st.slider("Previous Performance Score", min_value=30.0, max_value=100.0, value=82.0, step=0.5)
-        attendance = st.slider("Attendance Percentage (%)", min_value=50.0, max_value=100.0, value=96.0, step=0.5)
-        training_hours = st.number_input("Training Hours (Annual)", min_value=0.0, max_value=200.0, value=45.0, step=2.0)
-        num_trainings = st.number_input("Number of Trainings Attended", min_value=0, max_value=15, value=4, step=1)
-        projects_completed = st.number_input("Projects Completed", min_value=0, max_value=40, value=9, step=1)
-        working_hours = st.number_input("Working Hours / Week", min_value=20.0, max_value=80.0, value=42.0, step=1.0)
-        overtime_hours = st.number_input("Overtime Hours / Month", min_value=0.0, max_value=80.0, value=8.0, step=1.0)
-        job_satisfaction = st.slider("Job Satisfaction Rating", min_value=1, max_value=5, value=4)
+        prev_perf = st.slider("Previous Performance Score", min_value=30.0, max_value=100.0, value=82.0, step=0.5, key="pred_prev_perf_slider")
+        attendance = st.slider("Attendance Percentage (%)", min_value=50.0, max_value=100.0, value=96.0, step=0.5, key="pred_attendance_slider")
+        training_hours = st.number_input("Training Hours (Annual)", min_value=0.0, max_value=200.0, value=45.0, step=2.0, key="pred_training_hrs_input")
+        num_trainings = st.number_input("Number of Trainings Attended", min_value=0, max_value=15, value=4, step=1, key="pred_num_trainings_input")
+        projects_completed = st.number_input("Projects Completed", min_value=0, max_value=40, value=9, step=1, key="pred_projects_input")
+        working_hours = st.number_input("Working Hours / Week", min_value=20.0, max_value=80.0, value=42.0, step=1.0, key="pred_work_hrs_input")
+        overtime_hours = st.number_input("Overtime Hours / Month", min_value=0.0, max_value=80.0, value=8.0, step=1.0, key="pred_overtime_input")
+        job_satisfaction = st.slider("Job Satisfaction Rating", min_value=1, max_value=5, value=4, key="pred_job_sat_slider")
 
-    submit_btn = st.button("🔮 Predict Employee Performance", use_container_width=True, type="primary")
+    submit_btn = st.button("🔮 Predict Employee Performance", key="single_prediction_button", use_container_width=True, type="primary")
 
     if submit_btn:
         employee_payload = {
@@ -454,7 +454,7 @@ with tab_single:
             """, unsafe_allow_html=True)
 
         with res_col2:
-            st.plotly_chart(plot_probability_breakdown(result["probabilities"]), use_container_width=True)
+            st.plotly_chart(plot_probability_breakdown(result["probabilities"]), use_container_width=True, key="single_prediction_probability_donut")
 
         with res_col3:
             st.markdown("""
@@ -495,7 +495,7 @@ with tab_csv_train:
     st.subheader("📁 Dataset Explorer & Model Training Benchmarks")
     st.caption("Upload your custom HR dataset in CSV format, analyze distributions, and retrain ML pipelines.")
 
-    uploaded_file = st.file_uploader("Upload Employee Data (CSV)", type=["csv"], help="Must contain employee feature columns.")
+    uploaded_file = st.file_uploader("Upload Employee Data (CSV)", type=["csv"], key="train_dataset_file_uploader", help="Must contain employee feature columns.")
 
     if uploaded_file is not None:
         try:
@@ -531,8 +531,8 @@ with tab_csv_train:
 
     train_col1, train_col2 = st.columns([1, 2])
     with train_col1:
-        test_split = st.slider("Test Split Size", min_value=0.10, max_value=0.35, value=0.20, step=0.05)
-        train_btn = st.button("🚀 Train & Benchmark Models", type="primary", use_container_width=True)
+        test_split = st.slider("Test Split Size", min_value=0.10, max_value=0.35, value=0.20, step=0.05, key="train_test_split_ratio_slider")
+        train_btn = st.button("🚀 Train & Benchmark Models", key="btn_train_and_benchmark_models", type="primary", use_container_width=True)
 
     if train_btn:
         with st.spinner("Training Random Forest, Logistic Regression, and Gradient Boosting models..."):
@@ -565,7 +565,7 @@ with tab_csv_train:
 
     col_bench1, col_bench2 = st.columns(2)
     with col_bench1:
-        st.plotly_chart(plot_model_comparison(metrics), use_container_width=True)
+        st.plotly_chart(plot_model_comparison(metrics), use_container_width=True, key="chart_benchmarks_comparison_bar")
 
     with col_bench2:
         best_name = st.session_state["model_package"]["best_model_name"]
@@ -587,7 +587,7 @@ with tab_batch:
     st.subheader("⚡ Batch Employee Performance Prediction")
     st.caption("Upload a batch employee CSV to classify multiple employees at once and export predictions.")
 
-    batch_file = st.file_uploader("Upload CSV for Batch Prediction", type=["csv"], key="batch_uploader")
+    batch_file = st.file_uploader("Upload CSV for Batch Prediction", type=["csv"], key="batch_prediction_csv_uploader")
 
     batch_df_to_use = None
     if batch_file is not None:
@@ -601,7 +601,7 @@ with tab_batch:
         batch_df_to_use = st.session_state["current_dataset"]
 
     if batch_df_to_use is not None and not batch_df_to_use.empty:
-        if st.button("⚡ Run Batch Prediction Pipeline", type="primary", use_container_width=True):
+        if st.button("⚡ Run Batch Prediction Pipeline", key="btn_execute_batch_predictions", type="primary", use_container_width=True):
             with st.spinner("Processing batch inference..."):
                 pred_df, batch_stats = predict_batch_employees(batch_df_to_use, st.session_state["model_package"])
 
@@ -626,6 +626,7 @@ with tab_batch:
                 data=csv_data,
                 file_name="employee_predictions.csv",
                 mime="text/csv",
+                key="btn_download_employee_predictions_csv",
                 type="primary",
                 use_container_width=True
             )
@@ -653,8 +654,8 @@ with tab_dashboard:
         df_dash["Department"] = "General"
 
     dept_options = sorted([str(d) for d in df_dash["Department"].dropna().unique()])
-    selected_depts = st.multiselect("Filter by Department", options=dept_options, default=dept_options)
-    selected_cats = st.multiselect("Filter by Performance Tier", options=CATEGORIES, default=CATEGORIES)
+    selected_depts = st.multiselect("Filter by Department", options=dept_options, default=dept_options, key="dash_multiselect_departments")
+    selected_cats = st.multiselect("Filter by Performance Tier", options=CATEGORIES, default=CATEGORIES, key="dash_multiselect_categories")
 
     filtered_df = df_dash[
         (df_dash["Department"].isin(selected_depts)) &
@@ -677,21 +678,21 @@ with tab_dashboard:
         row2_col1, row2_col2 = st.columns(2)
         with row2_col1:
             if "Performance_Score" in filtered_df.columns:
-                st.plotly_chart(plot_performance_distribution(filtered_df), use_container_width=True)
+                st.plotly_chart(plot_performance_distribution(filtered_df), use_container_width=True, key="dash_chart_performance_histogram")
         with row2_col2:
             if "Department" in filtered_df.columns and "Performance_Score" in filtered_df.columns:
-                st.plotly_chart(plot_department_performance(filtered_df), use_container_width=True)
+                st.plotly_chart(plot_department_performance(filtered_df), use_container_width=True, key="dash_chart_department_performance_bar")
 
         # Row 3: Correlations
         row3_col1, row3_col2 = st.columns(2)
         with row3_col1:
             if "Years_of_Experience" in filtered_df.columns and "Performance_Score" in filtered_df.columns:
-                st.plotly_chart(plot_scatter_correlation(filtered_df, "Years_of_Experience", title="<b>Experience vs Performance Score</b>"), use_container_width=True)
+                st.plotly_chart(plot_scatter_correlation(filtered_df, "Years_of_Experience", title="<b>Experience vs Performance Score</b>"), use_container_width=True, key="dash_chart_experience_vs_performance_scatter")
             else:
                 st.info("Experience vs Performance chart requires 'Years_of_Experience' column.")
         with row3_col2:
             if "Attendance_Percentage" in filtered_df.columns and "Performance_Score" in filtered_df.columns:
-                st.plotly_chart(plot_scatter_correlation(filtered_df, "Attendance_Percentage", title="<b>Attendance Rate vs Performance Score</b>"), use_container_width=True)
+                st.plotly_chart(plot_scatter_correlation(filtered_df, "Attendance_Percentage", title="<b>Attendance Rate vs Performance Score</b>"), use_container_width=True, key="dash_chart_attendance_vs_performance_scatter")
             else:
                 st.info("Attendance vs Performance chart requires 'Attendance_Percentage' column.")
 
@@ -699,18 +700,18 @@ with tab_dashboard:
         row4_col1, row4_col2 = st.columns(2)
         with row4_col1:
             if "Training_Hours" in filtered_df.columns and "Performance_Score" in filtered_df.columns:
-                st.plotly_chart(plot_scatter_correlation(filtered_df, "Training_Hours", title="<b>Training Hours vs Performance Score</b>"), use_container_width=True)
+                st.plotly_chart(plot_scatter_correlation(filtered_df, "Training_Hours", title="<b>Training Hours vs Performance Score</b>"), use_container_width=True, key="dash_chart_training_vs_performance_scatter")
             else:
                 st.info("Training vs Performance chart requires 'Training_Hours' column.")
         with row4_col2:
             if "Job_Satisfaction" in filtered_df.columns and "Performance_Score" in filtered_df.columns:
-                st.plotly_chart(plot_satisfaction_box(filtered_df), use_container_width=True)
+                st.plotly_chart(plot_satisfaction_box(filtered_df), use_container_width=True, key="dash_chart_satisfaction_box_plot")
             else:
                 st.info("Job Satisfaction chart requires 'Job_Satisfaction' column.")
 
         # Row 5: Salary Analysis
         if "Monthly_Income" in filtered_df.columns and "Performance_Score" in filtered_df.columns:
-            st.plotly_chart(plot_scatter_correlation(filtered_df, "Monthly_Income", title="<b>Monthly Compensation vs Performance Score</b>", x_label="Monthly Income ($)"), use_container_width=True)
+            st.plotly_chart(plot_scatter_correlation(filtered_df, "Monthly_Income", title="<b>Monthly Compensation vs Performance Score</b>", x_label="Monthly Income ($)"), use_container_width=True, key="dash_chart_income_vs_performance_scatter")
         else:
             st.info("Compensation chart requires 'Monthly_Income' column.")
 
@@ -726,7 +727,7 @@ with tab_model_insights:
 
     col_imp1, col_imp2 = st.columns([1.4, 1])
     with col_imp1:
-        st.plotly_chart(plot_feature_importance(feat_imp, top_n=15), use_container_width=True)
+        st.plotly_chart(plot_feature_importance(feat_imp, top_n=15), use_container_width=True, key="chart_global_feature_importance")
 
     with col_imp2:
         st.markdown("#### 📌 Key Influencing Drivers")
@@ -744,4 +745,8 @@ with tab_model_insights:
     all_metrics = st.session_state["model_package"]["metrics"]
     for idx, (m_name, m_data) in enumerate(all_metrics.items()):
         with cm_cols[idx]:
-            st.plotly_chart(plot_confusion_matrix_heatmap(m_data["confusion_matrix"], model_name=m_name), use_container_width=True, key=f"insights_cm_{m_name}")
+            st.plotly_chart(
+                plot_confusion_matrix_heatmap(m_data["confusion_matrix"], model_name=m_name),
+                use_container_width=True,
+                key=f"confusion_matrix_{m_name}"
+            )
