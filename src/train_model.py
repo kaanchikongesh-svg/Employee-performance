@@ -166,8 +166,16 @@ def train_and_compare_models(
     if y_score is not None:
         y_score = y_score[valid_idx]
 
+    if len(X) < 10:
+        raise ValueError("Dataset must have at least 10 valid employee records to train ML models.")
+
+    # Check if stratification is possible (all present classes have at least 2 instances)
+    class_counts = y_cat.value_counts()
+    can_stratify = (len(class_counts) > 1) and (class_counts.min() >= 2)
+    stratify_target = y_cat if can_stratify else None
+
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y_cat, test_size=test_size, random_state=random_state, stratify=y_cat
+        X, y_cat, test_size=test_size, random_state=random_state, stratify=stratify_target
     )
 
     models_config = {

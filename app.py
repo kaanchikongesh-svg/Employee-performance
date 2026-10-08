@@ -35,6 +35,7 @@ from src.config import (
     GENDER_OPTIONS,
     DEPARTMENT_OPTIONS,
     JOB_ROLE_OPTIONS,
+    ALL_JOB_ROLES,
     PROMOTION_OPTIONS,
     ALL_FEATURE_COLUMNS,
     NUMERICAL_FEATURES,
@@ -367,40 +368,39 @@ with tab_single:
     st.subheader("👤 Individual Employee Performance Forecasting")
     st.caption("Fill in employee attributes to generate real-time machine learning predictions.")
 
-    with st.form(key="single_prediction_form"):
-        col_a, col_b, col_c = st.columns(3)
+    col_a, col_b, col_c = st.columns(3)
 
-        with col_a:
-            st.markdown("##### 🏢 Organizational Profile")
-            emp_id = st.text_input("Employee ID", value="EMP-2045")
-            dept = st.selectbox("Department", options=DEPARTMENT_OPTIONS, index=0)
-            role_options = JOB_ROLE_OPTIONS.get(dept, ALL_JOB_ROLES)
-            job_role = st.selectbox("Job Role", options=role_options, index=0)
-            job_level = st.selectbox("Job Level", options=[1, 2, 3, 4, 5], index=2)
-            monthly_income = st.number_input("Monthly Income ($)", min_value=1000.0, max_value=35000.0, value=7500.0, step=250.0)
-            team_size = st.number_input("Team Size", min_value=1, max_value=50, value=8, step=1)
+    with col_a:
+        st.markdown("##### 🏢 Organizational Profile")
+        emp_id = st.text_input("Employee ID", value="EMP-2045")
+        dept = st.selectbox("Department", options=DEPARTMENT_OPTIONS, index=0)
+        role_options = JOB_ROLE_OPTIONS.get(dept, ALL_JOB_ROLES)
+        job_role = st.selectbox("Job Role", options=role_options, index=0)
+        job_level = st.selectbox("Job Level", options=[1, 2, 3, 4, 5], index=2)
+        monthly_income = st.number_input("Monthly Income ($)", min_value=1000.0, max_value=35000.0, value=7500.0, step=250.0)
+        team_size = st.number_input("Team Size", min_value=1, max_value=50, value=8, step=1)
 
-        with col_b:
-            st.markdown("##### 👤 Demographics & Experience")
-            age = st.number_input("Age", min_value=18, max_value=65, value=33, step=1)
-            gender = st.selectbox("Gender", options=GENDER_OPTIONS, index=0)
-            experience = st.number_input("Years of Experience", min_value=0.0, max_value=40.0, value=7.0, step=0.5)
-            promotion_history = st.selectbox("Promoted in Company?", options=PROMOTION_OPTIONS, index=1)
-            years_since_promo = st.number_input("Years Since Last Promotion", min_value=0.0, max_value=20.0, value=1.5, step=0.5)
-            work_life_balance = st.slider("Work-Life Balance Rating", min_value=1, max_value=5, value=4)
+    with col_b:
+        st.markdown("##### 👤 Demographics & Experience")
+        age = st.number_input("Age", min_value=18, max_value=65, value=33, step=1)
+        gender = st.selectbox("Gender", options=GENDER_OPTIONS, index=0)
+        experience = st.number_input("Years of Experience", min_value=0.0, max_value=40.0, value=7.0, step=0.5)
+        promotion_history = st.selectbox("Promoted in Company?", options=PROMOTION_OPTIONS, index=1)
+        years_since_promo = st.number_input("Years Since Last Promotion", min_value=0.0, max_value=20.0, value=1.5, step=0.5)
+        work_life_balance = st.slider("Work-Life Balance Rating", min_value=1, max_value=5, value=4)
 
-        with col_c:
-            st.markdown("##### ⚡ Productivity & Engagement")
-            prev_perf = st.slider("Previous Performance Score", min_value=30.0, max_value=100.0, value=82.0, step=0.5)
-            attendance = st.slider("Attendance Percentage (%)", min_value=50.0, max_value=100.0, value=96.0, step=0.5)
-            training_hours = st.number_input("Training Hours (Annual)", min_value=0.0, max_value=200.0, value=45.0, step=2.0)
-            num_trainings = st.number_input("Number of Trainings Attended", min_value=0, max_value=15, value=4, step=1)
-            projects_completed = st.number_input("Projects Completed", min_value=0, max_value=40, value=9, step=1)
-            working_hours = st.number_input("Working Hours / Week", min_value=20.0, max_value=80.0, value=42.0, step=1.0)
-            overtime_hours = st.number_input("Overtime Hours / Month", min_value=0.0, max_value=80.0, value=8.0, step=1.0)
-            job_satisfaction = st.slider("Job Satisfaction Rating", min_value=1, max_value=5, value=4)
+    with col_c:
+        st.markdown("##### ⚡ Productivity & Engagement")
+        prev_perf = st.slider("Previous Performance Score", min_value=30.0, max_value=100.0, value=82.0, step=0.5)
+        attendance = st.slider("Attendance Percentage (%)", min_value=50.0, max_value=100.0, value=96.0, step=0.5)
+        training_hours = st.number_input("Training Hours (Annual)", min_value=0.0, max_value=200.0, value=45.0, step=2.0)
+        num_trainings = st.number_input("Number of Trainings Attended", min_value=0, max_value=15, value=4, step=1)
+        projects_completed = st.number_input("Projects Completed", min_value=0, max_value=40, value=9, step=1)
+        working_hours = st.number_input("Working Hours / Week", min_value=20.0, max_value=80.0, value=42.0, step=1.0)
+        overtime_hours = st.number_input("Overtime Hours / Month", min_value=0.0, max_value=80.0, value=8.0, step=1.0)
+        job_satisfaction = st.slider("Job Satisfaction Rating", min_value=1, max_value=5, value=4)
 
-        submit_btn = st.form_submit_button("🔮 Predict Employee Performance", use_container_width=True, type="primary")
+    submit_btn = st.button("🔮 Predict Employee Performance", use_container_width=True, type="primary")
 
     if submit_btn:
         employee_payload = {
@@ -632,18 +632,22 @@ with tab_dashboard:
     st.caption("Strategic workforce intelligence and multidimensional correlation analysis.")
 
     df_dash = st.session_state["current_dataset"].copy()
-    if "Performance_Score" not in df_dash.columns:
+    if "Performance_Score" not in df_dash.columns or "Performance_Category" not in df_dash.columns:
         # Generate predictions to power dashboard
-        df_dash, _ = predict_batch_employees(df_dash, st.session_state["model_package"])
-        df_dash["Performance_Score"] = df_dash["Predicted_Score"]
-        df_dash["Performance_Category"] = df_dash["Predicted_Category"]
+        try:
+            df_dash, _ = predict_batch_employees(df_dash, st.session_state["model_package"])
+            df_dash["Performance_Score"] = df_dash["Predicted_Score"]
+            df_dash["Performance_Category"] = df_dash["Predicted_Category"]
+        except Exception as err:
+            st.error(f"Could not generate dashboard predictions for current dataset: {err}")
 
-    # Filters
-    dash_f1, dash_f2 = st.columns(2)
-    with dash_f1:
-        selected_depts = st.multiselect("Filter by Department", options=sorted(df_dash["Department"].unique()), default=sorted(df_dash["Department"].unique()))
-    with dash_f2:
-        selected_cats = st.multiselect("Filter by Performance Tier", options=CATEGORIES, default=CATEGORIES)
+    # Ensure Department column exists
+    if "Department" not in df_dash.columns:
+        df_dash["Department"] = "General"
+
+    dept_options = sorted([str(d) for d in df_dash["Department"].dropna().unique()])
+    selected_depts = st.multiselect("Filter by Department", options=dept_options, default=dept_options)
+    selected_cats = st.multiselect("Filter by Performance Tier", options=CATEGORIES, default=CATEGORIES)
 
     filtered_df = df_dash[
         (df_dash["Department"].isin(selected_depts)) &
@@ -656,7 +660,8 @@ with tab_dashboard:
         # Row 1: KPI Cards
         kpi1, kpi2, kpi3, kpi4 = st.columns(4)
         kpi1.metric("Filtered Employees", f"{len(filtered_df):,}")
-        kpi2.metric("Mean Score", f"{filtered_df['Performance_Score'].mean():.1f}")
+        avg_s = filtered_df['Performance_Score'].mean() if "Performance_Score" in filtered_df.columns else 0.0
+        kpi2.metric("Mean Score", f"{avg_s:.1f}")
         kpi3.metric("Avg Attendance", f"{filtered_df['Attendance_Percentage'].mean():.1f}%" if "Attendance_Percentage" in filtered_df.columns else "N/A")
         kpi4.metric("Avg Training Hours", f"{filtered_df['Training_Hours'].mean():.1f} hrs" if "Training_Hours" in filtered_df.columns else "N/A")
 
@@ -664,26 +669,43 @@ with tab_dashboard:
         # Row 2: Charts
         row2_col1, row2_col2 = st.columns(2)
         with row2_col1:
-            st.plotly_chart(plot_performance_distribution(filtered_df), use_container_width=True)
+            if "Performance_Score" in filtered_df.columns:
+                st.plotly_chart(plot_performance_distribution(filtered_df), use_container_width=True)
         with row2_col2:
-            st.plotly_chart(plot_department_performance(filtered_df), use_container_width=True)
+            if "Department" in filtered_df.columns and "Performance_Score" in filtered_df.columns:
+                st.plotly_chart(plot_department_performance(filtered_df), use_container_width=True)
 
         # Row 3: Correlations
         row3_col1, row3_col2 = st.columns(2)
         with row3_col1:
-            st.plotly_chart(plot_scatter_correlation(filtered_df, "Years_of_Experience", title="<b>Experience vs Performance Score</b>"), use_container_width=True)
+            if "Years_of_Experience" in filtered_df.columns and "Performance_Score" in filtered_df.columns:
+                st.plotly_chart(plot_scatter_correlation(filtered_df, "Years_of_Experience", title="<b>Experience vs Performance Score</b>"), use_container_width=True)
+            else:
+                st.info("Experience vs Performance chart requires 'Years_of_Experience' column.")
         with row3_col2:
-            st.plotly_chart(plot_scatter_correlation(filtered_df, "Attendance_Percentage", title="<b>Attendance Rate vs Performance Score</b>"), use_container_width=True)
+            if "Attendance_Percentage" in filtered_df.columns and "Performance_Score" in filtered_df.columns:
+                st.plotly_chart(plot_scatter_correlation(filtered_df, "Attendance_Percentage", title="<b>Attendance Rate vs Performance Score</b>"), use_container_width=True)
+            else:
+                st.info("Attendance vs Performance chart requires 'Attendance_Percentage' column.")
 
         # Row 4: Training & Satisfaction
         row4_col1, row4_col2 = st.columns(2)
         with row4_col1:
-            st.plotly_chart(plot_scatter_correlation(filtered_df, "Training_Hours", title="<b>Training Hours vs Performance Score</b>"), use_container_width=True)
+            if "Training_Hours" in filtered_df.columns and "Performance_Score" in filtered_df.columns:
+                st.plotly_chart(plot_scatter_correlation(filtered_df, "Training_Hours", title="<b>Training Hours vs Performance Score</b>"), use_container_width=True)
+            else:
+                st.info("Training vs Performance chart requires 'Training_Hours' column.")
         with row4_col2:
-            st.plotly_chart(plot_satisfaction_box(filtered_df), use_container_width=True)
+            if "Job_Satisfaction" in filtered_df.columns and "Performance_Score" in filtered_df.columns:
+                st.plotly_chart(plot_satisfaction_box(filtered_df), use_container_width=True)
+            else:
+                st.info("Job Satisfaction chart requires 'Job_Satisfaction' column.")
 
         # Row 5: Salary Analysis
-        st.plotly_chart(plot_scatter_correlation(filtered_df, "Monthly_Income", title="<b>Monthly Compensation vs Performance Score</b>", x_label="Monthly Income ($)"), use_container_width=True)
+        if "Monthly_Income" in filtered_df.columns and "Performance_Score" in filtered_df.columns:
+            st.plotly_chart(plot_scatter_correlation(filtered_df, "Monthly_Income", title="<b>Monthly Compensation vs Performance Score</b>", x_label="Monthly Income ($)"), use_container_width=True)
+        else:
+            st.info("Compensation chart requires 'Monthly_Income' column.")
 
 
 # ==============================================================================

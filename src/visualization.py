@@ -87,18 +87,32 @@ def plot_scatter_correlation(
 ) -> go.Figure:
     """Generic scatter plot with trendline showing relationships with performance."""
     display_title = title or f"<b>{x_col.replace('_', ' ')} vs Performance</b>"
-    fig = px.scatter(
-        df,
-        x=x_col,
-        y=y_col,
-        color="Performance_Category" if "Performance_Category" in df.columns else None,
-        color_discrete_map=CATEGORY_COLORS,
-        trendline="ols",
-        opacity=0.75,
-        title=display_title,
-        labels={x_col: x_label or x_col.replace('_', ' '), y_col: "Performance Score"},
-        template=THEME_TEMPLATE,
-    )
+    try:
+        fig = px.scatter(
+            df,
+            x=x_col,
+            y=y_col,
+            color="Performance_Category" if "Performance_Category" in df.columns else None,
+            color_discrete_map=CATEGORY_COLORS,
+            trendline="ols",
+            opacity=0.75,
+            title=display_title,
+            labels={x_col: x_label or x_col.replace('_', ' '), y_col: "Performance Score"},
+            template=THEME_TEMPLATE,
+        )
+    except Exception:
+        # Graceful fallback without trendline if statsmodels encounters singular matrix or is unavailable
+        fig = px.scatter(
+            df,
+            x=x_col,
+            y=y_col,
+            color="Performance_Category" if "Performance_Category" in df.columns else None,
+            color_discrete_map=CATEGORY_COLORS,
+            opacity=0.75,
+            title=display_title,
+            labels={x_col: x_label or x_col.replace('_', ' '), y_col: "Performance Score"},
+            template=THEME_TEMPLATE,
+        )
     fig.update_layout(
         font_family=FONT_FAMILY,
         height=380,
