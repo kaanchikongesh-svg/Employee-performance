@@ -570,7 +570,14 @@ with tab_csv_train:
     with col_bench2:
         best_name = st.session_state["model_package"]["best_model_name"]
         cm_best = metrics[best_name]["confusion_matrix"]
-        st.plotly_chart(plot_confusion_matrix_heatmap(cm_best, model_name=best_name), use_container_width=True)
+        st.plotly_chart(
+            plot_confusion_matrix_heatmap(
+                cm_best,
+                model_name=best_name
+            ),
+            use_container_width=True,
+            key=f"benchmark_cm_{best_name}"
+        )
 
 
 # ==============================================================================
@@ -737,4 +744,4 @@ with tab_model_insights:
     all_metrics = st.session_state["model_package"]["metrics"]
     for idx, (m_name, m_data) in enumerate(all_metrics.items()):
         with cm_cols[idx]:
-            st.plotly_chart(plot_confusion_matrix_heatmap(m_data["confusion_matrix"], model_name=m_name), use_container_width=True)
+            st.plotly_chart(plot_confusion_matrix_heatmap(m_data["confusion_matrix"], model_name=m_name), use_container_width=True, key=f"insights_cm_{m_name}")
