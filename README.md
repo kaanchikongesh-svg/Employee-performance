@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 💼 Employee Performance Prediction & HR Analytics Platform
 
 An enterprise-grade **Machine Learning & HR Analytics Web Application** built with **Python, Scikit-Learn, and Streamlit**. It enables HR leaders, talent managers, and executives to forecast employee performance tiers, benchmark ML models, detect productivity drivers via Explainable AI, and perform batch talent audits.
@@ -193,3 +194,4 @@ Explanations calculate the directional delta between an employee's feature value
 
 ## 📄 License
 MIT License. Built for educational, demonstration, and HR analytics purposes.
+
